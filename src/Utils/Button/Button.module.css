@@ -1,0 +1,19 @@
+.button {
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.button__submit {
+  width: 170px;
+  padding: 6px;
+  background-image: linear-gradient(270deg, #ff00008c, #4b04ff8e);
+  box-shadow: 3px 3px 6px 1px #00000094;
+}
+
+.button__delete_user {
+  margin-left: 3px;
+  background-color: #fff;
+}

@@ -1,0 +1,17 @@
+.section {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 16px;
+  width: 500px;
+  min-height: 180px;
+  min-height: 300px;
+  padding: 40px 30px;
+  margin: 20px;
+  border: 1px solid rgb(94, 3, 3);
+  border-radius: 10px;
+  box-shadow: 3px 3px 4px rgb(177, 125, 125);
+}
+
+.section_phonebook {
+  height: 300px;
+  width: 300px;
+}

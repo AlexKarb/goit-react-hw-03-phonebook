@@ -1,0 +1,18 @@
+.searchForm {
+  font-size: 16px;
+  background-color: hsla(0, 61%, 83%, 0.425);
+  border: none;
+  border-radius: 8px;
+  padding: 5px 10px;
+  width: 100%;
+}
+
+.searchForm__label {
+  font-size: 18px;
+  text-transform: capitalize;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  flex-direction: column;
+  height: 70px;
+}

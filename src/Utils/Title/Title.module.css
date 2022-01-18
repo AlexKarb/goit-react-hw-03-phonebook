@@ -1,0 +1,17 @@
+.title {
+  font-size: 32px;
+  font-style: italic;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.title::after {
+  content: '';
+  display: inline-block;
+  width: 80%;
+  height: 3px;
+  background-image: linear-gradient(270deg, #ff00008c, #4b04ff8e);
+  position: absolute;
+  bottom: -10px;
+  left: 0px;
+}
