@@ -1,72 +1,58 @@
 import Button from '../Utils/Button/Button';
 import style from './ContactForm.module.css';
 import PropTypes from 'prop-types';
+import schema from '../helpers/validationForm';
+import Error from './ErrorMessage';
 import { Component } from 'react';
+import { Formik, Field, Form } from 'formik';
+
 const { phonebook, phonebook__label, phonebook__input } = style;
 
 class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
-  };
-
-  inputChange = e =>
-    this.setState({ [e.currentTarget.name]: e.currentTarget.value });
-
-  saveContact = e => {
-    e.preventDefault();
-    this.checkIsContactInBook();
-    this.resetForm();
-  };
-
-  checkIsContactInBook = () => {
-    const normalizeName = this.state.name.toLowerCase();
-    if (
-      this.props.allContacts.find(
+  findNameInPhonebook = (allContacts, ourContact) => {
+    const normalizeName = ourContact.name.toLowerCase();
+    return new Promise((resolve, reject) => {
+      const haveContact = allContacts.find(
         ({ name }) => name.toLowerCase() === normalizeName,
-      )
-    ) {
-      alert(`${this.state.name} is already in contacts`);
-    } else {
-      this.props.onSubmit(this.state.name, this.state.number);
-    }
-  };
+      );
 
-  resetForm = () => this.setState({ name: '', number: '' });
+      if (haveContact) {
+        reject(ourContact.name);
+      } else {
+        resolve(ourContact);
+      }
+    });
+  };
 
   render() {
-    const { name, number } = this.state;
-
+    const { allContacts, onSubmit } = this.props;
     return (
-      <form onSubmit={this.saveContact} className={phonebook}>
-        <label className={phonebook__label}>
-          Name
-          <input
-            className={phonebook__input}
-            type="text"
-            name="name"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            value={name}
-            onChange={this.inputChange}
-            required
-          />
-        </label>
-        <label className={phonebook__label}>
-          Number
-          <input
-            className={phonebook__input}
-            type="tel"
-            name="number"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            value={number}
-            onChange={this.inputChange}
-            required
-          />
-        </label>
-        <Button type="submit" styleFor="submit" text={'Add contact'} />
-      </form>
+      <Formik
+        initialValues={{ name: '', number: '' }}
+        validationSchema={schema}
+        onSubmit={(value, { resetForm }) => {
+          this.findNameInPhonebook(allContacts, value)
+            .then(({ name, number }) => onSubmit(name, number))
+            .catch(name => alert(`${name} is already in contacts`));
+
+          resetForm();
+        }}
+      >
+        <Form className={phonebook}>
+          <label className={phonebook__label}>
+            Name
+            <Field className={phonebook__input} type="text" name="name" />
+            <Error name="name" />
+          </label>
+
+          <label className={phonebook__label}>
+            Number
+            <Field className={phonebook__input} type="tel" name="number" />
+            <Error name="number" />
+          </label>
+          <Button type="submit" styleFor="submit" text={'Add contact'} />
+        </Form>
+      </Formik>
     );
   }
 }
@@ -76,6 +62,8 @@ ContactForm.propTypes = {
   allContacts: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
     }),
   ),
   onSubmit: PropTypes.func.isRequired,

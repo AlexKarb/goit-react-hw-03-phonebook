@@ -16,9 +16,21 @@ class App extends Component {
     filter: '',
   };
 
-  inputChange = e => {
-    return this.setState({ [e.currentTarget.name]: e.currentTarget.value });
-  };
+  componentDidMount() {
+    const savedState = JSON.parse(localStorage.getItem('contacts'));
+
+    if (savedState) {
+      this.setState({ contacts: savedState });
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
+  filterChange = e => this.setState({ filter: e.target.value });
 
   saveContact = (name, number) =>
     this.setState(prevState => ({
@@ -34,11 +46,13 @@ class App extends Component {
   };
 
   render() {
+    console.log('render');
     const { filter, contacts } = this.state;
     const normalizeFilter = filter.toLowerCase();
     const filterContact = contacts.filter(({ name }) =>
       name.toLowerCase().includes(normalizeFilter),
     );
+    const contactsList = filterContact.length === 0 ? contacts : filterContact;
 
     return (
       <div className="container">
@@ -49,10 +63,9 @@ class App extends Component {
         <Section>
           <Title title="Contacts" />
           <ContactsList
+            contactsList={contactsList}
             filter={filter}
-            filterContact={filterContact}
-            allContacts={contacts}
-            onChange={this.inputChange}
+            onChange={this.filterChange}
             onDelete={this.deleteContact}
           />
         </Section>

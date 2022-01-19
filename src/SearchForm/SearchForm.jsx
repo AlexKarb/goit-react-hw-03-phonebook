@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 
 const { searchForm, searchForm__label } = style;
 
-const SearchForm = ({ filter, onChange }) => (
+const SearchForm = ({ filter, filterChange }) => (
   <label className={searchForm__label}>
     Find contacts by name
     <input
+      autoComplete="off"
       className={searchForm}
       value={filter}
-      onChange={onChange}
+      onChange={filterChange}
       type="text"
       name="filter"
-      label="Find contacts by name"
     />
   </label>
 );
@@ -21,5 +21,4 @@ export default SearchForm;
 
 SearchForm.propType = {
   filter: PropTypes.string,
-  onChange: PropTypes.func.isRequired,
 };
