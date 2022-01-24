@@ -25,7 +25,7 @@ class App extends Component {
   }
 
   componentDidUpdate(_, prevState) {
-    if (prevState.contacts !== this.state.contacts) {
+    if (prevState.contacts.length !== this.state.contacts.length) {
       localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
     }
   }
@@ -46,7 +46,6 @@ class App extends Component {
   };
 
   render() {
-    console.log('render');
     const { filter, contacts } = this.state;
     const normalizeFilter = filter.toLowerCase();
     const filterContact = contacts.filter(({ name }) =>

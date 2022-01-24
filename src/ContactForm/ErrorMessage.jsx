@@ -4,7 +4,7 @@ import style from './ContactForm.module.css';
 const Error = ({ name }) => (
   <ErrorMessage
     name={name}
-    render={message => <p className={style.errorMessage}>iik{message}</p>}
+    render={message => <p className={style.errorMessage}>{message}</p>}
   />
 );
 
